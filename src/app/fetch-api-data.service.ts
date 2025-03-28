@@ -10,7 +10,7 @@ const apiUrl = 'https://star-flix-5d32add713bf.herokuapp.com/';
 @Injectable({
   providedIn: 'root'
 })
-export class UserRegistrationService {
+export class FetchApiDataService {
   constructor(private http: HttpClient) { }
 
   // Making the api call for the user registration endpoint
