@@ -1,0 +1,61 @@
+<h2 mat-dialog-title>Sign Up</h2>
+<mat-dialog-content>
+  <form (ngSubmit)="registerUser()" class="registration-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Username</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Username"
+        type="text"
+        name="Username"
+        required
+        placeholder="Enter your username"
+      />
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Password</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Password"
+        type="password"
+        name="Password"
+        required
+        placeholder="Enter your password"
+      />
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Email"
+        type="email"
+        name="Email"
+        required
+        placeholder="Enter your email"
+      />
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Birthday</mat-label>
+      <input
+        matInput
+        [(ngModel)]="userData.Birthday"
+        [matDatepicker]="picker"
+        name="Birthday"
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()">Cancel</button>
+  <button mat-raised-button (click)="registerUser()" color="primary">
+    Sign Up
+  </button>
+</mat-dialog-actions>
