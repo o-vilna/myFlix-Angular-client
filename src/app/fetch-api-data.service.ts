@@ -259,15 +259,32 @@ export class FetchApiDataService {
     return body || { };
   }
 
-  private handleError(error: HttpErrorResponse): any {
+  private handleError(error: HttpErrorResponse): Observable<any> {
+    let errorMessage = 'Something went wrong; please try again later.';
+    
     if (error.error instanceof ErrorEvent) {
-      console.error('Some error occurred:', error.error.message);
+      // Client-side error
+      errorMessage = `Error: ${error.error.message}`;
     } else {
-      console.error(
-        `Error Status code ${error.status}, ` +
-        `Error body is: ${error.error}`
-      );
+      // Server-side error
+      if (error.status === 400) {
+        if (error.error && error.error.message) {
+          errorMessage = error.error.message;
+        } else {
+          errorMessage = 'Invalid login credentials or user does not exist';
+        }
+      } else if (error.status === 404) {
+        errorMessage = 'User not found';
+      } else if (error.status === 401) {
+        errorMessage = 'Unauthorized access. Please login again';
+      } else if (error.status === 403) {
+        errorMessage = 'Access forbidden';
+      } else if (error.status === 500) {
+        errorMessage = 'Server error. Please try again later';
+      }
     }
-    return throwError(() => new Error('Something bad happened; please try again later.'));
+    
+    console.error(`Error Status code ${error.status}, Error body is: ${JSON.stringify(error.error)}`);
+    return throwError(() => new Error(errorMessage));
   }
 }

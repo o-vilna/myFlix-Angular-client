@@ -57,7 +57,7 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    fetch(`https://star-flix-5d32add713bf.herokuapp.com/users/${username}`, {
+    fetch(`https://star-flix-5d32add713bf.herokuapp.com/users`, {
       method: "GET",
       headers: { 
         Authorization: `Bearer ${token}`,
@@ -72,10 +72,16 @@ export class UserProfileComponent implements OnInit {
         }
       })
       .then((data) => {
-        this.user = data;
-        // Видаляємо пароль з об'єкта користувача
-        delete this.user.Password;
-        console.log('User data:', this.user);
+        // Пошук користувача за ім'ям
+        const currentUser = data.find((u: any) => u.Username === username);
+        if (currentUser) {
+          this.user = currentUser;
+          // Видаляємо пароль з об'єкта користувача
+          delete this.user.Password;
+          console.log('User data:', this.user);
+        } else {
+          throw new Error('User not found');
+        }
       })
       .catch((error) => {
         console.error('Error fetching user data:', error);
