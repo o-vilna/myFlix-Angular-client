@@ -16,8 +16,8 @@ export class FetchApiDataService {
 
   // Making the api call for the user registration endpoint
   public userRegistration(userDetails: any): Observable<any> {
-    console.log('Registering user:', userDetails);
     return this.http.post(apiUrl + 'users', userDetails).pipe(
+      map(this.extractResponseData),
       catchError(this.handleError)
     );
   }
@@ -35,6 +35,7 @@ export class FetchApiDataService {
           localStorage.setItem('user', result.user.Username);
           localStorage.setItem('token', result.token);
           localStorage.setItem('userData', JSON.stringify(result.user));
+          console.log('User successfully authenticated');
         }
         return result;
       }),
@@ -141,9 +142,7 @@ export class FetchApiDataService {
   getFavoriteMovies(): Observable<any> {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
-    console.log('Getting favorite movies for:', username);
-    console.log('Using token:', token);
-    
+  
     if (!token || !username) {
       console.error('Missing token or username');
       return throwError(() => new Error('No auth token or username found'));
@@ -254,12 +253,16 @@ export class FetchApiDataService {
 
   // Non-typed response extraction
   private extractResponseData(res: any): any {
-    console.log('Extracting response data:', res);
     const body = res;
-    return body || { };
+    return body || {};
   }
 
   private handleError(error: HttpErrorResponse): Observable<any> {
+    // Переконайтесь, що тут не відображаються конфіденційні дані
+    
+    // Замініть логування з повним об'єктом помилки на конкретні поля
+    console.error(`Error Status code ${error.status}, Error message: ${error.message}`);
+    
     let errorMessage = 'Something went wrong; please try again later.';
     
     if (error.error instanceof ErrorEvent) {
@@ -284,7 +287,6 @@ export class FetchApiDataService {
       }
     }
     
-    console.error(`Error Status code ${error.status}, Error body is: ${JSON.stringify(error.error)}`);
     return throwError(() => new Error(errorMessage));
   }
 }

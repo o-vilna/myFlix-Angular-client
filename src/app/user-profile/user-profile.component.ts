@@ -171,6 +171,9 @@ export class UserProfileComponent implements OnInit {
   }
 
   updateUserProfile(): void {
+    // Не логуйте об'єкт користувача з паролем
+    console.log('Updating user profile for:', this.user.Username);
+    
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
     

@@ -8,9 +8,9 @@ import { CommonModule } from '@angular/common';
   template: `
     <h2 mat-dialog-title>{{ data.genre.Name }}</h2>
     <mat-dialog-content>
-      <p>{{ data.genre.Description }}</p>
+      <p style="word-wrap: break-word;">{{ data.genre.Description }}</p>
     </mat-dialog-content>
-    <mat-dialog-actions>
+    <mat-dialog-actions align="center">
       <button mat-button (click)="closeDialog()">Close</button>
     </mat-dialog-actions>
   `,
