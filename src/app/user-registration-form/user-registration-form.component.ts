@@ -47,12 +47,18 @@ export class UserRegistrationFormComponent implements OnInit {
     this.fetchApiData.userRegistration(this.userData).subscribe({
       next: (result) => {
         this.dialogRef.close();
-        this.snackBar.open(result, 'OK', {
+        this.snackBar.open('User registration successful', 'OK', {
           duration: 2000
         });
       },
-      error: (result) => {
-        this.snackBar.open(result, 'OK', {
+      error: (error) => {
+        let errorMessage = 'Registration failed';
+        if (typeof error === 'string') {
+          errorMessage = error;
+        } else if (error?.message) {
+          errorMessage = error.message;
+        }
+        this.snackBar.open(errorMessage, 'OK', {
           duration: 2000
         });
       }
