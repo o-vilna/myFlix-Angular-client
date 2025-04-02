@@ -5,7 +5,7 @@
       <mat-label>Username</mat-label>
       <input
         matInput
-        [(ngModel)]="userData.Username"
+        [(ngModel)]="loginData.Username"
         type="text"
         name="Username"
         required
@@ -18,7 +18,7 @@
       <mat-label>Password</mat-label>
       <input
         matInput
-        [(ngModel)]="userData.Password"
+        [(ngModel)]="loginData.Password"
         type="password"
         name="Password"
         required
@@ -26,9 +26,10 @@
       />
       <mat-icon matSuffix>lock</mat-icon>
     </mat-form-field>
+
+    <div class="button-container">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" type="submit">Login</button>
+    </div>
   </form>
 </mat-dialog-content>
-<mat-dialog-actions align="end">
-  <button mat-button (click)="dialogRef.close()">Cancel</button>
-  <button mat-raised-button (click)="loginUser()" color="primary">Login</button>
-</mat-dialog-actions>

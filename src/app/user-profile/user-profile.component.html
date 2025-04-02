@@ -1,0 +1,98 @@
+<div class="profile-container">
+  <mat-card class="profile-card">
+    <mat-card-header>
+      <mat-card-title>User Profile</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form (ngSubmit)="updateUserProfile()">
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            [(ngModel)]="user.Username"
+            name="username"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            [(ngModel)]="user.Email"
+            name="email"
+            type="email"
+            required
+          />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Birth Date</mat-label>
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="user.Birth_date"
+            name="birth_date"
+            required
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>New Password (optional)</mat-label>
+          <input
+            matInput
+            type="password"
+            [(ngModel)]="newPassword"
+            name="newPassword"
+          />
+        </mat-form-field>
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit">
+            <mat-icon>save</mat-icon>
+            Update Profile
+          </button>
+          <button mat-raised-button color="warn" (click)="deleteUserProfile()">
+            <mat-icon>delete</mat-icon>
+            Delete Account
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Favorite Movies</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="movies-grid">
+        <mat-card *ngFor="let movie of favoriteMovies" class="movie-card">
+          <img
+            mat-card-image
+            [src]="movie.ImagePath"
+            [alt]="movie.Title"
+            class="movie-image"
+          />
+          <mat-card-content>
+            <mat-card-title>{{ movie.Title }}</mat-card-title>
+            <p>{{ movie.Description }}</p>
+            <button
+              mat-raised-button
+              color="warn"
+              (click)="removeFromFavorites(movie._id)"
+            >
+              <mat-icon>favorite_border</mat-icon>
+              Remove from Favorites
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

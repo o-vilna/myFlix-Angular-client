@@ -1,10 +1,21 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
+        { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+        DateAdapter,
+        { provide: DateAdapter, useClass: NativeDateAdapter },
+        MatDatepickerModule,
+        MatNativeDateModule
+      ],
     }).compileComponents();
   });
 

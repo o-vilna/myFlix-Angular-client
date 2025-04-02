@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FetchApiDataService } from '../fetch-api-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FetchApiDataService } from '../fetch-api-data.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-login-form',
@@ -19,40 +19,62 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     FormsModule,
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatButtonModule,
-    MatSnackBarModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
     MatIconModule
   ]
 })
 export class UserLoginFormComponent implements OnInit {
-  userData = { Username: '', Password: '' };
+  loginData = { Username: '', Password: '' };
 
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
   }
 
   loginUser(): void {
-    this.fetchApiData.userLogin(this.userData).subscribe({
+    console.log('Login attempt with:', this.loginData);
+    this.fetchApiData.userLogin(this.loginData).subscribe({
       next: (result) => {
-        // Store user and token in localStorage
-        localStorage.setItem('user', JSON.stringify(result.user));
-        localStorage.setItem('token', result.token);
-        
-        this.dialogRef.close();
-        this.snackBar.open('Login successful!', 'OK', {
-          duration: 2000
-        });
+        console.log('Login response:', result);
+        if (result.user && result.token) {
+          console.log('Setting localStorage items:');
+          console.log('user:', result.user.Username);
+          console.log('token:', result.token);
+          console.log('userData:', result.user);
+          
+          localStorage.setItem('user', result.user.Username);
+          localStorage.setItem('token', result.token);
+          localStorage.setItem('userData', JSON.stringify(result.user));
+          
+          // Перевіряємо, чи дані збереглися
+          console.log('Checking localStorage after setting:');
+          console.log('user:', localStorage.getItem('user'));
+          console.log('token:', localStorage.getItem('token'));
+          console.log('userData:', localStorage.getItem('userData'));
+          
+          this.dialogRef.close();
+          this.snackBar.open('Login successful', 'OK', {
+            duration: 2000
+          });
+          this.router.navigate(['movies']);
+        } else {
+          console.error('Invalid response structure:', result);
+          this.snackBar.open('Invalid response from server', 'OK', {
+            duration: 2000
+          });
+        }
       },
-      error: (result) => {
-        this.snackBar.open(result, 'OK', {
+      error: (error) => {
+        console.error('Login error:', error);
+        this.snackBar.open('Login failed', 'OK', {
           duration: 2000
         });
       }
