@@ -11,6 +11,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
+/**
+ * Component for user login functionality
+ * @component UserLoginFormComponent
+ */
 @Component({
   selector: 'app-user-login-form',
   templateUrl: './user-login-form.component.html',
@@ -27,8 +31,18 @@ import { Router } from '@angular/router';
   ]
 })
 export class UserLoginFormComponent implements OnInit {
+  /**
+   * Object containing user login credentials
+   */
   loginData = { Username: '', Password: '' };
 
+  /**
+   * Creates an instance of UserLoginFormComponent
+   * @param fetchApiData Service for making API calls
+   * @param dialogRef Reference to the dialog containing this component
+   * @param snackBar Service for showing notifications
+   * @param router Service for navigation
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserLoginFormComponent>,
@@ -36,9 +50,16 @@ export class UserLoginFormComponent implements OnInit {
     private router: Router
   ) { }
 
+  /**
+   * Lifecycle hook that is called after data-bound properties are initialized
+   */
   ngOnInit(): void {
   }
 
+  /**
+   * Handles user login process
+   * Makes API call to authenticate user and stores user data in localStorage
+   */
   loginUser(): void {
     console.log('Login attempt with:', this.loginData);
     this.fetchApiData.userLogin(this.loginData).subscribe({
@@ -54,7 +75,7 @@ export class UserLoginFormComponent implements OnInit {
           localStorage.setItem('token', result.token);
           localStorage.setItem('userData', JSON.stringify(result.user));
           
-          // Перевіряємо, чи дані збереглися
+          // Check if data was saved
           console.log('Checking localStorage after setting:');
           console.log('user:', localStorage.getItem('user'));
           console.log('token:', localStorage.getItem('token'));

@@ -3,6 +3,7 @@ import { AppComponent } from './app.component';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, NativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MY_FORMATS } from './app.config';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -10,7 +11,7 @@ describe('AppComponent', () => {
       imports: [AppComponent],
       providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'uk-UA' },
-        { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS },
+        { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
         DateAdapter,
         { provide: DateAdapter, useClass: NativeDateAdapter },
         MatDatepickerModule,

@@ -3,6 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Component for displaying director information in a dialog
+ * @component DirectorDialogComponent
+ */
 @Component({
   selector: 'app-director-dialog',
   template: `
@@ -18,11 +22,19 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, MatButtonModule, MatDialogModule]
 })
 export class DirectorDialogComponent {
+  /**
+   * Creates an instance of DirectorDialogComponent
+   * @param dialogRef Reference to the dialog containing this component
+   * @param data Data containing director information
+   */
   constructor(
     public dialogRef: MatDialogRef<DirectorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { director: any }
   ) {}
 
+  /**
+   * Closes the dialog
+   */
   closeDialog(): void {
     this.dialogRef.close();
   }

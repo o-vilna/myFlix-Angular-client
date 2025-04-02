@@ -12,7 +12,12 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { FetchApiDataService } from '../fetch-api-data.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
 
+/**
+ * Component for displaying and managing user profile
+ * @component UserProfileComponent
+ */
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -32,22 +37,51 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   ]
 })
 export class UserProfileComponent implements OnInit {
+  /**
+   * User data object
+   */
   user: any = {};
+
+  /**
+   * Array of favorite movies
+   */
   favoriteMovies: any[] = [];
+
+  /**
+   * Array of all movies
+   */
   movies: any[] = [];
+
+  /**
+   * New password input
+   */
   newPassword: string = '';
 
+  /**
+   * Creates an instance of UserProfileComponent
+   * @param fetchApiData Service for API calls
+   * @param snackBar Service for showing notifications
+   * @param router Router for navigation
+   * @param dialog Dialog service for showing dialogs
+   */
   constructor(
-    public fetchApiData: FetchApiDataService,
-    public snackBar: MatSnackBar,
-    private router: Router
+    private fetchApiData: FetchApiDataService,
+    private snackBar: MatSnackBar,
+    private router: Router,
+    private dialog: MatDialog
   ) {}
 
+  /**
+   * Lifecycle hook that is called after data-bound properties are initialized
+   */
   ngOnInit(): void {
     this.getUser();
     this.getAllMovies();
   }
 
+  /**
+   * Fetches user profile data
+   */
   getUser(): void {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
@@ -72,11 +106,11 @@ export class UserProfileComponent implements OnInit {
         }
       })
       .then((data) => {
-        // Пошук користувача за ім'ям
+        // Find user by username
         const currentUser = data.find((u: any) => u.Username === username);
         if (currentUser) {
           this.user = currentUser;
-          // Видаляємо пароль з об'єкта користувача
+          // Remove password from user object
           delete this.user.Password;
           console.log('User data:', this.user);
         } else {
@@ -91,6 +125,9 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  /**
+   * Fetches all movies
+   */
   getAllMovies(): void {
     const token = localStorage.getItem('token');
     
@@ -124,6 +161,9 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  /**
+   * Fetches favorite movies
+   */
   getFavoriteMovies(): void {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
@@ -161,6 +201,11 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  /**
+   * Formats date
+   * @param dateString Date string to format
+   * @returns Formatted date string
+   */
   formatDate(dateString: string): string {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -170,8 +215,11 @@ export class UserProfileComponent implements OnInit {
     return `${day}.${month}.${year}`;
   }
 
+  /**
+   * Updates user profile
+   */
   updateUserProfile(): void {
-    // Не логуйте об'єкт користувача з паролем
+    // Do not log user object with password
     console.log('Updating user profile for:', this.user.Username);
     
     const token = localStorage.getItem('token');
@@ -184,10 +232,10 @@ export class UserProfileComponent implements OnInit {
       return;
     }
 
-    // Підготовка даних для оновлення
+    // Prepare data for update
     const userData = { ...this.user };
     
-    // Додаємо новий пароль до даних користувача, якщо він був введений
+    // Add new password to user data if entered
     if (this.newPassword) {
       userData.Password = this.newPassword;
     }
@@ -212,7 +260,7 @@ export class UserProfileComponent implements OnInit {
         this.snackBar.open('Profile updated successfully', 'OK', {
           duration: 2000
         });
-        // Очищаємо поле нового пароля після успішного оновлення
+        // Clear new password field after successful update
         this.newPassword = '';
       })
       .catch((error) => {
@@ -223,6 +271,9 @@ export class UserProfileComponent implements OnInit {
       });
   }
 
+  /**
+   * Deletes user profile
+   */
   deleteUserProfile(): void {
     if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
       const token = localStorage.getItem('token');
@@ -262,6 +313,10 @@ export class UserProfileComponent implements OnInit {
     }
   }
 
+  /**
+   * Removes movie from favorites
+   * @param movieId ID of the movie to remove
+   */
   removeFromFavorites(movieId: string): void {
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');

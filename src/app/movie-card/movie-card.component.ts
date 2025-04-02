@@ -10,6 +10,10 @@ import { DirectorDialogComponent } from '../director-dialog/director-dialog.comp
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SynopsisDialogComponent } from '../synopsis-dialog/synopsis-dialog.component';
 
+/**
+ * Component for displaying movie cards
+ * @component MovieCardComponent
+ */
 @Component({
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
@@ -18,20 +22,39 @@ import { SynopsisDialogComponent } from '../synopsis-dialog/synopsis-dialog.comp
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule]
 })
 export class MovieCardComponent implements OnInit {
+  /**
+   * Array of movies
+   */
   movies: any[] = [];
+
+  /**
+   * Array of favorite movie IDs
+   */
   favoriteMovies: string[] = [];
 
+  /**
+   * Creates an instance of MovieCardComponent
+   * @param fetchApiData Service for API calls
+   * @param dialog Service for showing dialogs
+   * @param snackBar Service for showing notifications
+   */
   constructor(
-    public fetchApiData: FetchApiDataService,
+    private fetchApiData: FetchApiDataService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {}
 
+  /**
+   * Lifecycle hook that is called after data-bound properties are initialized
+   */
   ngOnInit(): void {
     this.getMovies();
     this.getFavoriteMovies();
   }
 
+  /**
+   * Fetches all movies
+   */
   getMovies(): void {
     this.fetchApiData.getAllMovies().subscribe((resp: any) => {
       this.movies = resp;
@@ -40,6 +63,9 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Fetches favorite movies
+   */
   getFavoriteMovies(): void {
     this.fetchApiData.getFavoriteMovies().subscribe((resp: any) => {
       this.favoriteMovies = resp.FavoriteMovies || [];
@@ -48,10 +74,19 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Checks if a movie is favorite
+   * @param movieId ID of the movie to check
+   * @returns True if the movie is favorite, false otherwise
+   */
   isFavorite(movieId: string): boolean {
     return this.favoriteMovies.includes(movieId);
   }
 
+  /**
+   * Toggles favorite status of a movie
+   * @param movieId ID of the movie to toggle
+   */
   toggleFavorite(movieId: string): void {
     console.log('Toggling favorite for movie:', movieId);
     console.log('Current favorites:', this.favoriteMovies);
@@ -93,6 +128,10 @@ export class MovieCardComponent implements OnInit {
     }
   }
 
+  /**
+   * Opens dialog with genre information
+   * @param movie Movie object containing genre information
+   */
   openGenreDialog(movie: any): void {
     this.dialog.open(GenreDialogComponent, {
       width: '400px',
@@ -100,6 +139,10 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens dialog with director information
+   * @param movie Movie object containing director information
+   */
   openDirectorDialog(movie: any): void {
     this.dialog.open(DirectorDialogComponent, {
       width: '400px',
@@ -107,6 +150,10 @@ export class MovieCardComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens dialog with movie synopsis
+   * @param movie Movie object containing synopsis information
+   */
   openDescriptionDialog(movie: any): void {
     this.dialog.open(SynopsisDialogComponent, {
       width: '400px',

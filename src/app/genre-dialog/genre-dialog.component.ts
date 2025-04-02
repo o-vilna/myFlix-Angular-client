@@ -3,6 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef, MatDialogModule } from '@angular/materia
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
+/**
+ * Component for displaying genre information in a dialog
+ * @component GenreDialogComponent
+ */
 @Component({
   selector: 'app-genre-dialog',
   template: `
@@ -18,9 +22,16 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule, MatButtonModule, MatDialogModule]
 })
 export class GenreDialogComponent {
+  /**
+   * Creates an instance of GenreDialogComponent
+   * @param data Data passed to dialog containing genre information
+   */
   constructor(
     public dialogRef: MatDialogRef<GenreDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { genre: any }
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      genre: { Name: string; Description: string }
+    }
   ) {}
 
   closeDialog(): void {

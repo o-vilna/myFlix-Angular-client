@@ -6,7 +6,9 @@ import { MAT_DATE_LOCALE, DateAdapter, MAT_DATE_FORMATS } from '@angular/materia
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import { routes } from './app.routes';
 
-// Формат дати для Moment.js
+/**
+ * Date format configuration for Moment.js
+ */
 export const MY_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',
@@ -19,12 +21,16 @@ export const MY_FORMATS = {
   },
 };
 
+/**
+ * Application configuration
+ * Provides necessary services and configurations for the app
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideHttpClient(),
     provideAnimations(),
-    // Провайдери для MomentDateAdapter
+    // MomentDateAdapter providers
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
     {
       provide: DateAdapter,

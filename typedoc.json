@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["src/app"],
+  "entryPointStrategy": "expand",
+  "out": "docs",
+  "name": "MyFlix Angular Client Documentation",
+  "exclude": ["**/*+(index|.spec|.e2e).ts"],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true
+}

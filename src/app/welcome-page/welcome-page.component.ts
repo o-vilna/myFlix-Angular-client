@@ -6,6 +6,11 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
+/**
+ * Component for welcome page
+ * @component WelcomePageComponent
+ * Displays the landing page with user registration and login options
+ */
 @Component({
   selector: 'app-welcome-page',
   templateUrl: './welcome-page.component.html',
@@ -19,6 +24,9 @@ export class WelcomePageComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  /**
+   * Opens the user registration dialog
+   */
   openUserRegistrationDialog(): void {
     this.dialog.open(UserRegistrationFormComponent, {
       width: '400px',
@@ -26,6 +34,9 @@ export class WelcomePageComponent implements OnInit {
     });
   }
 
+  /**
+   * Opens the user login dialog
+   */
   openUserLoginDialog(): void {
     this.dialog.open(UserLoginFormComponent, {
       width: '400px',

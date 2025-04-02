@@ -13,6 +13,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
+/**
+ * Component for user registration functionality
+ * @component UserRegistrationFormComponent
+ */
 @Component({
   selector: 'app-user-registration-form',
   templateUrl: './user-registration-form.component.html',
@@ -32,17 +36,33 @@ import { MatIconModule } from '@angular/material/icon';
   ]
 })
 export class UserRegistrationFormComponent implements OnInit {
+  /**
+   * Object containing user registration data
+   */
   @Input() userData = { Username: '', Password: '', Email: '', Birthday: '' };
 
+  /**
+   * Creates an instance of UserRegistrationFormComponent
+   * @param fetchApiData Service for making API calls
+   * @param dialogRef Reference to the dialog containing this component
+   * @param snackBar Service for showing notifications
+   */
   constructor(
     public fetchApiData: FetchApiDataService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
     public snackBar: MatSnackBar
   ) { }
 
+  /**
+   * Lifecycle hook that is called after data-bound properties are initialized
+   */
   ngOnInit(): void {
   }
 
+  /**
+   * Handles user registration process
+   * Makes API call to register new user and shows success/error message
+   */
   registerUser(): void {
     this.fetchApiData.userRegistration(this.userData).subscribe({
       next: (result) => {
