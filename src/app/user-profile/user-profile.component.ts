@@ -217,11 +217,13 @@ export class UserProfileComponent implements OnInit {
 
   /**
    * Updates user profile
+   * If username or password is changed, automatically logs out the user and redirects to login page
+   * @remarks
+   * - When username is changed: Shows notification and redirects to login page after 3 seconds
+   * - When password is changed: Shows notification and redirects to login page after 3 seconds
+   * - For other profile updates: Updates data and shows success message
    */
   updateUserProfile(): void {
-    // Do not log user object with password
-    console.log('Updating user profile for:', this.user.Username);
-    
     const token = localStorage.getItem('token');
     const username = localStorage.getItem('user');
     
@@ -234,8 +236,8 @@ export class UserProfileComponent implements OnInit {
 
     // Prepare data for update
     const userData = { ...this.user };
+    const isPasswordChanged = !!this.newPassword;
     
-    // Add new password to user data if entered
     if (this.newPassword) {
       userData.Password = this.newPassword;
     }
@@ -256,12 +258,30 @@ export class UserProfileComponent implements OnInit {
         }
       })
       .then((data) => {
-        localStorage.setItem('userData', JSON.stringify(data));
-        this.snackBar.open('Profile updated successfully', 'OK', {
-          duration: 2000
-        });
-        // Clear new password field after successful update
-        this.newPassword = '';
+        // Check if username or password has changed
+        if (data.Username !== username || isPasswordChanged) {
+          const message = isPasswordChanged 
+            ? 'Password updated. Please login with your new password.'
+            : 'Username updated. Please login with your new username.';
+          
+          this.snackBar.open(message, 'OK', {
+            duration: 3000
+          });
+          
+          // Clear localStorage and redirect to login page
+          setTimeout(() => {
+            localStorage.clear(); // Remove all user data
+            this.router.navigate(['welcome']); // Redirect to login page
+          }, 3000);
+        } else {
+          // If neither username nor password changed
+          localStorage.setItem('userData', JSON.stringify(data));
+          this.snackBar.open('Profile updated successfully', 'OK', {
+            duration: 2000
+          });
+        }
+        
+        this.newPassword = ''; // Clear password field
       })
       .catch((error) => {
         console.error('Error updating profile:', error);
